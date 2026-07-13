@@ -1,73 +1,90 @@
----
-page_type: sample
-languages:
-- typescript
-products:
-- office-teams
-- office
-name: My First Meeting App
-urlFragment: officedev-teamsfx-samples-tab-hello-world-in-meeting
-description: A template for apps using only in the context of a Teams meeting.
-extensions:
-  createdDate: "2022-04-08"
----
-# Getting Started with HelloWorld In-meeting app
+# 🎲 Glacier Dice
 
-This App helps to enable your apps for Teams meetings and configure the apps to be available in the meeting scope. This app covers show Teams context in meeting detail view, chat view and side panel.
+A 3D dice roller for Microsoft Teams meetings, built with React, TypeScript,
+and Three.js. Roll dice together in the meeting side panel, chat, or details
+view — pick a background, a dice variant, and how many dice to throw.
 
-![side panel](images/sidepanel.png)
+## Features
 
-> App Caching was configured in this sample to reduce the reload time of your app in a meeting. To learn about limitations and available scopes, please check [Enable app caching for your tab app](https://aka.ms/teamsfx-app-caching).
+- **3D dice with real roll physics** — free-tumble spin, two decaying bounce
+  arcs, and a settle-to-face animation (not just a random number swap).
+- **3 backgrounds** — pick where the dice are played:
+  - **Glacier Hollow** — frozen ice cave, cold light, light snowfall
+  - **Midnight Club** — neon lounge table, spinning disco ball, colored spotlights
+  - **The Alley** — warm wooden bowling lane, hanging lamps, gutters
+- **3 dice variants**, each with its own material and impact effect:
+  - **Ice** — translucent carved-ice dice with a frost-shard burst on landing
+  - **Neon** — glowing acrylic dice with an electric-spark trail and burst
+  - **Classic** — plain white/black casino dice with a soft dust puff
+- **1–6 dice per roll**, auto-arranged and rolled together.
+- Runs as a Teams meeting tab (side panel, chat, and details view).
 
-## This sample illustrates
+## Tech stack
 
-- How to use Microsoft 365 Agents Toolkit to create a Teams meeting app.
-- How to use Teams Client Library to get context data in Teams app.
+- React 18 + TypeScript, bootstrapped with Create React App (`react-scripts`)
+- [Three.js](https://threejs.org/) via [`@react-three/fiber`](https://docs.pmnd.rs/react-three-fiber) + [`@react-three/drei`](https://github.com/pmndrs/drei)
+- [`@microsoft/teams-js`](https://www.npmjs.com/package/@microsoft/teams-js) for Teams meeting context
+- [Microsoft 365 Agents Toolkit](https://aka.ms/teams-toolkit) for provisioning/deploying the Teams app + Azure Static Web App
 
-## Prerequisite to use this sample
+## Project structure
 
-- [Node.js](https://nodejs.org/), supported versions: 18, 20, 22
-- A Microsoft 365 tenant in which you have permission to upload Teams apps. You can get a free Microsoft 365 developer tenant by joining the [Microsoft 365 developer program](https://developer.microsoft.com/en-us/microsoft-365/dev-program).
-- [Microsoft 365 Agents Toolkit Visual Studio Code Extension](https://aka.ms/teams-toolkit) version 5.0.0 and higher or [Microsoft 365 Agents Toolkit CLI](https://aka.ms/teams-toolkit-cli)
-- Follow the instruction to [create a meeting in Teams](https://support.microsoft.com/en-us/office/create-a-meeting-in-teams-for-personal-and-small-business-use-eb571219-517b-49bf-afe1-4fff091efa85). Then in the Calendar you can find the meeting you just created. Double click the meeting will open the meeting details, and will enable the meeting app to be added in this meeting in later steps.
+```
+src/components/
+  Tab.tsx                 Teams meeting tab entry point (mounts DiceRoller)
+  dice/
+    DiceRoller.tsx          control panel (background / variant / dice count / roll) + scene
+    DiceScene.tsx            <Canvas> wiring: background, dice layout, particles, camera
+    Die.tsx                  single die: roll physics (tumble → settle), shared by all variants
+    dieVariants.tsx          per-variant material + particle theme (ice / neon / classic)
+    GlacierBackground.tsx    ice cave background
+    ClubBackground.tsx       neon lounge background
+    AlleyBackground.tsx      bowling alley background
+    DiceParticles.tsx        shared particle pool for trail + impact-burst effects
+    pipTextures.ts           canvas-generated dice face textures per variant
+    config.ts                background/variant registry + scene config types
+```
 
-## Minimal path to awesome
+Adding a new variant or background is additive: register it in `config.ts`,
+then add a branch in `dieVariants.tsx` (materials/particles) or `DiceScene.tsx`
+(background component) — the roll physics and particle system don't change.
 
-### Run the app locally
+## Run it locally
 
-1. In Visual Studio Code: Start debugging the project by hitting the `F5` key in your keyboard. Alternatively open the `Run and Debug Activity` panel(Ctrl+Shift+D) in Visual Studio Code and click the `Run and Debug` green arrow button.
-1. The Teams web client will launch in your browser, click the small arrow sit aside the `Add` button and select `Add to a meeting`, then select the meeting you just created.
-1. Click `Set up a tab` in the next step, it will take you to the meeting configuration page.
-1. In the configuration page, click `Save`, this may take several minutes, and then you will see the meeting chat tab.
-1. Click `Join` to join the meeting.
-1. Select the tab (default name is `My Tab`) in the bar, you will see a side panel tab in the meeting.
+```bash
+npm install
+npm start
+```
 
-### Deploy the app to Azure
+To run it inside an actual Teams meeting for local testing:
 
-Deploy your project to Azure by following these steps:
+1. In VS Code, press `F5` (or use the Run and Debug panel) to start
+   debugging — this launches the Teams web client.
+2. Add the app to a meeting: click the arrow next to `Add` → `Add to a
+   meeting`, and select a meeting on your calendar.
+   ([How to create a meeting in Teams](https://support.microsoft.com/en-us/office/create-a-meeting-in-teams-for-personal-and-small-business-use-eb571219-517b-49bf-afe1-4fff091efa85))
+3. Click `Set up a tab`, then `Save`.
+4. Join the meeting and open the tab to see Glacier Dice running in the side
+   panel/meeting chat.
 
-1. Open Microsoft 365 Agents Toolkit in Visual Studio Code, and sign in your Azure account by clicking the `Sign in to Azure` in the `ACCOUNTS` section from sidebar.
-1. After you signed in, select a subscription under your account. The Microsoft 365 Agents Toolkit will use this subscription to provision Azure resources to host you app.
-1. Open the Microsoft 365 Agents Toolkit and click `Provision` in the `LIFECYCLE` section. Alternatively open the command palette(Ctrl+Shift+P) and type: `Microsoft 365 Agents: Provision` command.
-1. Open the Microsoft 365 Agents Toolkit and click `Deploy` in the `LIFECYCLE` section. Alternatively open the command palette(Ctrl+Shift+P) and type: `Microsoft 365 Agents: Deploy` command.
+Prerequisites: [Node.js](https://nodejs.org/) 18/20/22, a Microsoft 365
+tenant you can upload Teams apps to (a free [developer
+tenant](https://developer.microsoft.com/en-us/microsoft-365/dev-program)
+works), and the [Microsoft 365 Agents Toolkit](https://aka.ms/teams-toolkit)
+VS Code extension.
 
-> Note: Provision Azure cloud resources and deploy to Azure may cause charges to your Azure Subscription.
+## Deploy to Azure
 
-### Preview the app in Teams
+1. In the Microsoft 365 Agents Toolkit panel, sign in to Azure and pick a
+   subscription.
+2. Run `Microsoft 365 Agents: Provision` to create the Azure resources.
+3. Run `Microsoft 365 Agents: Deploy` to publish the build.
 
-After you have completed the provision and deploy steps in `Deploy the app to Azure` section, you can preview your app in Teams client by following steps below:
+> Provisioning and deploying Azure resources may incur charges on your
+> subscription.
 
-1. Open the `Run and Debug Activity` panel from sidebar, or use short key Ctrl+Shift+D.
-1. Select `Launch Remote (Edge)` or `Launch Remote (Chrome)` in the launch configuration (a dropdown selection in the upper-left corner).
-1. Press the `Start Debugging` (small green arrow) button to launch your app, the Teams web client will be automatically opened in your browser, where you will see your app running remotely from Azure.
+## Live Share sync (in progress)
 
-## Version History
-
-| Date         | Author | Comments                               |
-| ------------ | ------ | -------------------------------------- |
-| Dec 15, 2022 | Kai    | update to support Microsoft 365 Agent Toolkit V4.2.0 |
-| Mar 16, 2023 | Kai    | update to support Microsoft 365 Agent Toolkit V5.0.0 |
-
-## Feedback
-
-We really appreciate your feedback! If you encounter any issue or error, please report issues to us following the [Supporting Guide](https://github.com/OfficeDev/TeamsFx-Samples/blob/dev/SUPPORT.md). Meanwhile you can make [recording](https://aka.ms/teamsfx-record) of your journey with our product, they really make the product better. Thank you!
+`DiceScene`/`Die` accept a `rollId` — increment it to trigger a synchronized
+roll. `DiceRoller` exposes `onAllSettled(values)` with the final face values
+and an `externalRollId` prop for driving rolls from outside (e.g. a Live
+Share `LiveState` roll event), so every participant sees the same roll.

@@ -14,12 +14,12 @@
         "outline": "outline.png"
     },
     "name": {
-        "short": "hello-world-in-meeting${{APP_NAME_SUFFIX}}",
-        "full": "Full name for hello-world-in-meeting"
+        "short": "Glacier Dice${{APP_NAME_SUFFIX}}",
+        "full": "Glacier Dice — 3D Dice Roller for Teams Meetings"
     },
     "description": {
-        "short": "Short description of hello-world-in-meeting",
-        "full": "Full description of hello-world-in-meeting"
+        "short": "Roll 3D dice with your team, right inside a Teams meeting.",
+        "full": "Glacier Dice is a 3D dice roller for Teams meetings. Choose a background (Glacier, Club, Alley) and a dice variant (Ice, Neon, Classic), pick how many dice to roll, and roll together in the meeting side panel."
     },
     "accentColor": "#FFFFFF",
     "supportsChannelFeatures": "tier1",

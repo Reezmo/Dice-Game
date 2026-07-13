@@ -2,7 +2,7 @@
 version: v1.9
 
 additionalMetadata:
-  sampleTag: TeamsFx-Samples:hello-world-in-meeting
+  sampleTag: GlacierDice
 
 environmentFolderPath: ./env
 
@@ -10,7 +10,7 @@ provision:
   # Creates a Teams app
   - uses: teamsApp/create
     with:
-      name: hello-world-in-meeting${{APP_NAME_SUFFIX}}
+      name: Glacier Dice${{APP_NAME_SUFFIX}}
     # Write the information of created resources into environment file for
     # the specified environment variable(s).
     writeToEnvironmentFile:
