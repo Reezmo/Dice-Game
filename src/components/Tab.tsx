@@ -1,6 +1,7 @@
 import React from "react";
 import { app, teamsCore } from "@microsoft/teams-js";
 import MediaQuery from "react-responsive";
+import DiceRoller from "./dice/DiceRoller";
 import "./App.css";
 
 // Define the interface for the component state
@@ -54,22 +55,18 @@ class Tab extends React.Component<{}, TabState> {
   }
 
   render(): JSX.Element {
-    let meetingId = this.state.meetingId ?? "";
-    let userPrincipleName = this.state.userName ?? "";
-
     return (
       <div>
-        <h1>In-meeting app sample</h1>
-        <h3>Principle Name:</h3>
-        <p>{userPrincipleName}</p>
-        <h3>Meeting ID:</h3>
-        <p>{meetingId}</p>
         <MediaQuery maxWidth={280}>
           <h3>This is the side panel</h3>
           <a href="https://docs.microsoft.com/en-us/microsoftteams/platform/apps-in-teams-meetings/teams-apps-in-meetings">
             Need more info, open this document in new tab or window.
           </a>
         </MediaQuery>
+        <MediaQuery minWidth={281}>
+          <DiceRoller />
+        </MediaQuery>
+        {/* meetingId: {meetingId}, user: {userPrincipleName} — kept in state for Live Share wiring */}
       </div>
     );
   }
